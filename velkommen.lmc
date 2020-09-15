@@ -1,0 +1,21 @@
+Skriv   LDA txt
+        BRZ Ferdig
+        OTC
+        LDA Skriv 
+        ADD v1 
+        STA Skriv 
+        BRA Skriv 
+Ferdig  HLT 
+
+v1      DAT 1 // Konstant 1 
+txt     DAT 86 // ’V’ 
+        DAT 101 // ’e’ 
+        DAT 108 // ’l’ 
+        DAT 107 // ’k’ 
+        DAT 111 // ’o’ 
+        DAT 109 // ’m’ 
+        DAT 109 // ’m’ 
+        DAT 101 // ’e’ 
+        DAT 110 // ’n’ 
+        DAT 33 // ’!’ 
+        DAT 0 // Slutt

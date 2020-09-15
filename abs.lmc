@@ -1,0 +1,9 @@
+start   INP
+        BRP print
+        STA x
+        SUB x
+        SUB x
+print   OUT
+        HLT
+
+x       DAT

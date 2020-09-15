@@ -1,0 +1,24 @@
+START   INP      //     int(input(""))
+        STA a    // a =
+        INP      //     int(input(""))
+        STA b    // b =
+        LDA v0   //       0
+        STA Res  // Res =
+LOOP    LDA a    //
+        BRZ EXIT // while a != 0:
+        SUB v1   //       a -1
+        STA a    //   a =
+        LDA Res  //         Res
+        ADD b    //             + b
+        STA Res  //   Res =
+        BRA LOOP //
+
+EXIT    LDA Res  //       Res)
+        OUT      // print(
+        HLT      //
+
+a       DAT
+b       DAT
+Res     DAT
+v0      DAT 0
+v1      DAT 1
