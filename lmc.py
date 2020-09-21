@@ -139,7 +139,9 @@ def erInt(tekst):
 
 def kjor():
     global programteller, akkumulator, program, koder
-    for _ in range(100):
+    while True:
+        if verbose:
+            print("Evaluerer:", programteller, akkumulator)
         data = program[programteller]
         kode = 100 * (data // 100)
 
@@ -194,9 +196,10 @@ def main():
 
                     break
             else:
-                print("Fant ingen kommando på linje %i" % (linjeteller))
+                if verbose:
+                    print("Fant ingen kommando på linje %i" % (linjeteller))
 
-            print(kommando,loc)
+            #print(kommando,loc)
 
             if kommando == 'DAT':
                     if erInt(loc):
@@ -215,11 +218,16 @@ def main():
 
             linjeteller += 1
 
-    print(program)
-    print(merkelapper)
+    #print(program)
+    #print(merkelapper)
 
     kjor()
 
+def print_program():
+    for i in range(10):
+        for j in range(10):
+#            print(program[i*10+j])
+            print(str(program[i*10+j]).rjust(4, ' '), end="")
 
 
 if __name__ == '__main__':
