@@ -18,4 +18,5 @@ txt     DAT 86 // ’V’
         DAT 101 // ’e’ 
         DAT 110 // ’n’ 
         DAT 33 // ’!’ 
+        DAT 10 // CR
         DAT 0 // Slutt

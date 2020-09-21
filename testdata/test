@@ -1,0 +1,17 @@
+#!/usr/bin/bash 
+DIR=.
+PROGRAMDIR=..
+LMC=../lmc.py
+
+for test in $(cat $DIR/tester.txt)
+do
+    program=${test//[[:digit:]]/}
+    res=$(cat "$test".in | python3 $LMC "$program".lmc | diff - "$test".out)
+    if [ -n "$res" ]; then 
+        echo -e "$test \e[31mfeilet\e[0m\nDiff: \n$res"
+    else
+        echo -e "$test \e[32mpasserte\e[0m" 
+    fi
+
+done
+
