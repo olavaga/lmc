@@ -1,0 +1,11 @@
+START   LDA H
+        OTC
+        LDA e
+        OTC
+        LDA i
+        OTC
+END     HLT
+
+H       DAT 72 // = 'H'
+e       DAT 101 // = 'e'
+i       DAT 105 // = 'i'

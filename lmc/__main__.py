@@ -1,5 +1,6 @@
 #Dette er en lmc-interpret skrevet i python
 # coding=utf-8
+from argparse import ArgumentParser
 import sys
 
 global merkelapper, program, verbose, programteller, akkumulator, kommandoer, koder
@@ -141,6 +142,7 @@ def kjor():
     global programteller, akkumulator, program, koder
     while True:
         if verbose:
+            print_program()
             print("Evaluerer:", programteller, akkumulator)
         data = program[programteller]
         kode = 100 * (data // 100)
@@ -153,22 +155,46 @@ def kjor():
         loc = data % 100
         funksjon(loc)
 
-def main():
-    if (len(sys.argv) == 1):
-        print("Dette programmet tar et filnavn som argument")
-        sys.exit()
+def make_parser():
+    parser = ArgumentParser(description="Run lmc programs from the terminal")
 
+    parser.add_argument('filename', \
+                        metavar='FILENAME', \
+                        help="Specify an UTF-8 formatted file to run")
+
+    parser.add_argument('-v', '--verbose', \
+                        action='store_const',\
+                        const=True,
+                        default=False,
+                        help="Get a printout of all steps and memory for\
+                                each step of lmc.")
+
+
+    return parser
+
+def main():
+    parser = make_parser()
+    args = parser.parse_args()
+
+    verbose = args.verbose
 
     linjeteller = 0
+    print(args.filename)
 
-    with open(sys.argv[1]) as file:
+    if not args.filename:
+        parser.parse_args(['-h'])
+
+    with open(args.filename) as file:
         for line in file:
+            if verbose:
+                print(line.strip())
+
             merkelapp = ""
             for k in kommandoer.keys():
                 if k in line:
                     if 0 < line.find(k):
                         merkelapp = line[:line.find(k)]
-                        merkelapp=merkelapp.strip(' \n\r')
+                        merkelapp=merkelapp.strip(' \t\n\r')
                         break
 
             if merkelapp:
@@ -181,6 +207,9 @@ def main():
         for line in file:
             kommando, loc = "",""
             line = line[0:line.find("//")]
+            if len(line) == 0:
+                continue
+           
             for k in kommandoer.keys():
                 if k in line:
                     if len(line[line.rfind(k):line.rfind(k) + len(k)+1].strip(' \n\r')) != len(k):
@@ -199,7 +228,8 @@ def main():
                 if verbose:
                     print("Fant ingen kommando på linje %i" % (linjeteller))
 
-            #print(kommando,loc)
+            if verbose:
+                print(kommando,loc)
 
             if kommando == 'DAT':
                     if erInt(loc):
@@ -218,16 +248,16 @@ def main():
 
             linjeteller += 1
 
-    #print(program)
-    #print(merkelapper)
+    if verbose:
+        print(merkelapper)
 
     kjor()
 
 def print_program():
     for i in range(10):
         for j in range(10):
-#            print(program[i*10+j])
             print(str(program[i*10+j]).rjust(4, ' '), end="")
+        print()
 
 
 if __name__ == '__main__':

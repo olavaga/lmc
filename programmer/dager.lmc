@@ -1,0 +1,24 @@
+// Les m som input fra bruker:
+            INP
+// Legg sammen innlest verdi og LDA_i:
+            ADD LDA_i
+// Lagre ny instruksjon i posisjonen hent:
+            STA     hent
+hent        DAT     0     // Plass til LDA.
+            OUT           // Skriv svaret.
+            HLT           // Ferdig.
+
+LDA_i       LDA     antDager
+antDager    DAT     0
+            DAT     31  // Jan
+            DAT     28  // Feb
+            DAT     31  // Mar
+            DAT     30  // Apr
+            DAT     31  // Mai
+            DAT     30  // Jun
+            DAT     31  // Jul
+            DAT     31  // Aug
+            DAT     30  // Sep
+            DAT     31  // Okt
+            DAT     30  // Nov
+            DAT     31  // Des

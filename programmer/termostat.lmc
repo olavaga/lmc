@@ -1,0 +1,9 @@
+start   INP
+        STA   romtemp
+        INP
+        STA   nytemp
+        SUB   romtemp
+        OUT
+        HLT
+romtemp DAT
+nytemp  DAT
