@@ -33,21 +33,20 @@ def main():
     if not args.file:
         parser.parse_args(['-h'])
 
-    else:
-        program = read_program(args.file)
+    program = read_program(args.file)
         
-        lmc = Program(program)
+    lmc = Program(program)
 
-        for programteller, instruction_register, address_register, akkumulator in lmc:
-            if args.verbose:
-                print(lmc)
-                print("Program counter:", programteller)
-                print("Instruction register:", instruction_register)
-                print("Address register:", address_register)
-                print("Accumulator:", akkumulator)
-            if args.step:
-                input()
-            pass
+    for programteller, instruction_register, address_register, akkumulator in lmc:
+        if args.verbose:
+            print(lmc)
+            print("Program counter:", programteller)
+            print("Instruction register:", instruction_register)
+            print("Address register:", address_register)
+            print("Accumulator:", akkumulator)
+        if args.step:
+            input()
+        pass
 
 
 
