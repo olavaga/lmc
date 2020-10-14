@@ -2,22 +2,21 @@
 class Program:
 
     def __init__(self, program):
-        self.program = program
-        self.halted = False
-        self.programteller = 0
-        self.akkumulator = 0
-
-    def isHalted(self):
-        return self.halted
+        self.load(program)
 
     def load(self, program):
         self.program = program
-        self.halted = False
+        self.reset()
 
     def reset(self):
         self.programteller = 0
         self.akkumulator = 0
+        self.output = ""
+        self.inputs = []
         self.halted = False
+
+    def isHalted(self):
+        return self.halted
 
     def step(self):
         instruction_register = int(self.program[self.programteller]) // 100
@@ -62,18 +61,15 @@ class Program:
 
         elif instruction_register == 9: 
             if address_register == 1: # 901 --> INP
-                self.akkumulator = input()
-                while not self.akkumulator.isdigit() or -999 > int(self.akkumulator) > 999:
-                    self.akkumulator = input("Vennligst oppgi et tall mellom -1000 og 1000")
-                self.akkumulator = int(self.akkumulator)
+                self.akkumulator = self.input()
                 self.programteller += 1
 
             elif address_register == 2: # 902 --> OUT
-                print(self.akkumulator)
+                self.output += str(self.akkumulator) + "\n"
                 self.programteller += 1
 
             elif address_register == 22: # 922 --> OTC
-                print(chr(self.akkumulator), end = "")
+                self.output += chr(self.akkumulator)
                 self.programteller += 1
 
             else:
@@ -84,7 +80,27 @@ class Program:
             print("Invalid instruction %i on line %i" \
                     % (self.program[self.programteller], self.programteller))
         
+    def input(self):
+        if self.inputs:
+            return int(self.inputs.remove(0))
+
+        else:
+            tall = input()
+            while not self.erInt(tall) or -999 > int(self.akkumulator) > 999:
+                tall = input("Vennligst oppgi et tall mellom -1000 og 1000: ")
+
+            return int(tall)
+
+    def erInt(self, tekst):
+        try:
+            int(tekst)
+            return True
+
+        except ValueError:
+            return False
+
     def run(self):
+        self.halted = False
         self.step()
         while self.program[self.programteller] != 0:
             self.step()
@@ -99,9 +115,10 @@ class Program:
                 tekststreng += str(self.program[i * 10 + j]).rjust(4, ' ')
             tekststreng += "\n"
         
-        tekststreng += "Program counter:" + str(self.programteller) + "\n"
-        tekststreng += "Instruction register:" + str(instruction_register) + "\n"
-        tekststreng += "Address register:" + str(address_register) + "\n"
-        tekststreng += "Accumulator:" + str(self.akkumulator) + "\n"
+        tekststreng += "\nProgram counter: " + str(self.programteller) + "\n"
+        tekststreng += "Instruction register: " + str(instruction_register) + "\n"
+        tekststreng += "Address register: " + str(address_register) + "\n"
+        tekststreng += "Accumulator: " + str(self.akkumulator) + "\n"
+        tekststreng += "\nOutput: " + str(self.output) + "\n"
 
         return tekststreng

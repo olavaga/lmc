@@ -34,7 +34,9 @@ def make_parser():
                         help="Print memory and registers on exit.")
     return parser
 
-def explain(line, instruksjon, acc):
+def explain(line, myProgram):
+    instruksjon = myProgram.program[line]
+    acc = myProgram.akkumulator
     inst = int(instruksjon) // 100
     add = int(instruksjon) % 100
 
@@ -42,10 +44,12 @@ def explain(line, instruksjon, acc):
         print("%i: HLT - Stopped running. Accumulator: %i" % (line, acc))
 
     elif inst == 1:
-        print("%i: ADD - Adding the contents of register %i to the accumulator. Result %i" % ( line, add, acc))
+        print("%i: ADD - Adding register %i to the accumulator. %i + %i = %i"\
+                % ( line, add, acc - myProgram.program[add], myProgram.program[add], acc))
 
     elif inst == 2:
-        print("%i: SUB - Subtracting the register %i from the accumulator. Result %i" % ( line, add, acc))
+        print("%i: SUB - Subtracting register %i from the accumulator. %i - %i = %i"\
+                % ( line, add, acc + myProgram.program[add], myProgram.program[add], acc))
 
     elif inst == 3:
         print("%i: STA - Writing %i to register %i." % ( line, acc, add))
@@ -72,8 +76,10 @@ def explain(line, instruksjon, acc):
         if add == 1:
             print("%i: INP - Received input \"%i\" from standard in." % (line, acc))
         elif add == 2:
+            print(myProgram.output)
             print("\n%i: OUT - Wrote the number \"%i\" to standard out." % (line, acc))
         elif add == 22:
+            print(myProgram.output)
             print("\n%i: OTC - Wrote the character \"%s\" to standard out." % (line, chr(acc)))
 
 def main():
@@ -97,7 +103,7 @@ def main():
             print(myProgram)
 
         if args.explain:
-            explain(line, myProgram.program[line], myProgram.akkumulator)
+            explain(line, myProgram)
 
         if args.step:
             input()
@@ -110,6 +116,9 @@ def main():
 
     if args.count:
         print("Finished execution in %i steps" % steps)
+
+    if not args.memory and not args.verbose and not args.explain:
+        print(myProgram.output, end="")
 
 
 if __name__ == '__main__':
