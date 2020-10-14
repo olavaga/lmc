@@ -44,9 +44,9 @@ def split_instruction(line):
 
             break
 
-    marker = marker.strip(' \n\r')
-    instruction = instruction.strip(' \n\r')
-    location = location.strip(' \n\r')
+    marker = marker.strip(' \t\n\r')
+    instruction = instruction.strip(' \t\n\r')
+    location = location.strip(' \t\n\r')
         
     return marker, instruction, location
 
