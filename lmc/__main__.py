@@ -13,41 +13,103 @@ def make_parser():
                         help="Specify an UTF-8 formatted file to run")
 
     parser.add_argument('-v', '--verbose', \
-                        action='store_const',\
-                        const=True,
-                        default=False,
+                        action='store_true',\
                         help="Get a printout of all steps and memory for\
                                 each step of lmc.")
 
+    parser.add_argument('-e', '--explain', \
+                        action='store_true',\
+                        help="Provide a sentence explaining each step.")
+
     parser.add_argument('-s', '--step', \
-                        action='store_const',\
-                        const=True,
-                        default=False,
+                        action='store_true',\
                         help="Step through program by hitting enter.")
+
+    parser.add_argument('-c', '--count', \
+                        action='store_true',\
+                        help="Count the number of instructions executed.")
+
+    parser.add_argument('-m', '--memory', \
+                        action='store_true',\
+                        help="Print memory and registers on exit.")
     return parser
+
+def explain(line, instruksjon, acc):
+    inst = int(instruksjon) // 100
+    add = int(instruksjon) % 100
+
+    if instruksjon == 0:
+        print("%i: HLT - Stopped running. Accumulator: %i" % (line, acc))
+
+    elif inst == 1:
+        print("%i: ADD - Adding the contents of register %i to the accumulator. Result %i" % ( line, add, acc))
+
+    elif inst == 2:
+        print("%i: SUB - Subtracting the register %i from the accumulator. Result %i" % ( line, add, acc))
+
+    elif inst == 3:
+        print("%i: STA - Writing %i to register %i." % ( line, acc, add))
+
+    elif inst == 5:
+        print("%i: LDA - Loading %i from register %i." % (line, acc, add))
+
+    elif inst == 6:
+        print("%i: BRA - Jumping to %i. Fetching the next instruction from that register" % (line, add))
+
+    elif inst == 7:
+        if acc == 0:
+            print("%i: BRZ - Jumping to %i because %i == 0." % (line, add, acc))
+        else:
+            print("%i: BRZ - Not jumping to %i because %i =/= 0." % (line, add, acc))
+
+    elif inst == 8:
+        if acc >= 0:
+            print("%i: BRP - Jumping to %i, because %i is positive." % (line, add, acc))
+        else: 
+            print("%i: BRP - Not jumping because %i is negative." % (line, acc))
+
+    elif inst == 9:
+        if add == 1:
+            print("%i: INP - Received input \"%i\" from standard in." % (line, acc))
+        elif add == 2:
+            print("\n%i: OUT - Wrote the number \"%i\" to standard out." % (line, acc))
+        elif add == 22:
+            print("\n%i: OTC - Wrote the character \"%s\" to standard out." % (line, chr(acc)))
 
 def main():
     parser = make_parser()
     args = parser.parse_args()
 
-    if not args.file:
-        parser.parse_args(['-h'])
-
     program = read_program(args.file)
         
-    lmc = Program(program)
+    myProgram = Program(program)
 
-    for programteller, instruction_register, address_register, akkumulator in lmc:
+    if args.verbose:
+        print(myProgram)
+
+    line = 0
+    steps = 0
+
+    while not myProgram.isHalted():
+        myProgram.step()
+
         if args.verbose:
-            print(lmc)
-            print("Program counter:", programteller)
-            print("Instruction register:", instruction_register)
-            print("Address register:", address_register)
-            print("Accumulator:", akkumulator)
+            print(myProgram)
+
+        if args.explain:
+            explain(line, myProgram.program[line], myProgram.akkumulator)
+
         if args.step:
             input()
-        pass
 
+        line = myProgram.programteller
+        steps += 1
+
+    if args.memory:
+        print(myProgram)
+
+    if args.count:
+        print("Finished execution in %i steps" % steps)
 
 
 if __name__ == '__main__':
