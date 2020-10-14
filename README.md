@@ -8,9 +8,11 @@ Programmene velkommen.lmc og multiplikasjon.lmc er hentet fra forelesninger i IN
 
 For å innstallere tolkeren må du først laste ned koden, enten gjennom git clone eller som et zip-arkiv. Deretter må du bruke pip install for å installere pakken.
 
+```
 git clone https://github.com/olavaga/lmc.git
 cd lmc
 pip install .
+```
 
 Etter å ha gjort dette skal du kunne bruke kommandoen "lmc" i terminalen.
 
@@ -20,9 +22,13 @@ Interpreten kan kjøres med "lmc filnavn". Som standard vil kun outputs gitt med
 
 ## Inndata fra fil
 
+```
 cat inndata.txt | lmc program.txt
+```
 
+```
 cat inndata.txt | lmc program.txt | diff utdata.txt
+```
 
 ## Testing
 
