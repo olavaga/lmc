@@ -60,6 +60,7 @@ class Program:
 
             elif address_register == 2: # 902 --> OUT
                 print(self.akkumulator)
+                self.programteller += 1
 
             elif address_register == 22: # 922 --> OTC
                 print(chr(self.akkumulator), end = "")
