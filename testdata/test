@@ -1,7 +1,7 @@
 #!/usr/bin/bash 
 DIR=.
 PROGRAMDIR=..
-LMC=../lmc.py
+LMC=../lmc
 
 for test in $(cat $DIR/tester.txt)
 do
