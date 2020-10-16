@@ -23,31 +23,21 @@ def verbose(string):
 def split_instruction(line):
     marker, instruction, location = "", "", ""
     line = line[0:line.find("//")]
-    if len(line) == 0:
-        return marker, instruction, location
+    
+    words = line.split()
 
-    for k in kommandoer.keys():
-        if k in line.upper():
-            start = line.upper().rfind(k)
-            slutt = start + len(k)
+    if 0 < len(words) and words[0] in kommandoer.keys():
+        instruction = words[0]
+        location = words[1] if 1 < len(words) else ""
 
-            if len(line[start:slutt + 1].strip(' \n\r')) != len(k):
-                continue
+    elif 1 < len(words) and words[1] in kommandoer.keys():
+        marker = words[0]
+        instruction = words[1]
+        location = words[2] if 2 < len(words) else ""
 
-            if 0 < start:
-                marker = line[:start]
-
-            instruction=k.upper()
-
-            if slutt < len(line):
-                location = line[slutt:]
-
-            break
-
-    marker = marker.strip(' \t\n\r')
-    instruction = instruction.strip(' \t\n\r')
-    location = location.strip(' \t\n\r')
-        
+    if instruction in ['HLT', 'INP', 'OTC', 'OUT']:
+        location = ""
+  
     return marker, instruction, location
 
 def find_linemarkers(filename):
@@ -90,8 +80,12 @@ def read_program(filename):
                 if loc in merkelapper.keys():
                     program[linjeteller] = kommandoer[kommando] + merkelapper[loc]
 
-                else:
+                elif erInt(loc):
                     program[linjeteller] = kommandoer[kommando] + int(loc)
+
+                else:
+                    print(str(linjeteller) + ": Merkelapp " + loc + " ikke deklarert")
+                    sys.exit(0)
 
             elif kommando:
                 program[linjeteller] = kommandoer[kommando]
@@ -102,6 +96,14 @@ def read_program(filename):
             linjeteller += 1
 
     return program
+
+def erInt(tekst):
+    try:
+        int(tekst)
+        return True
+
+    except ValueError:
+        return False
 
 
 
