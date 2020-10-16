@@ -75,10 +75,12 @@ class Program:
             else:
                 print("Invalid instruction %i on line %i" \
                         % (self.program[self.programteller], self.programteller))
+                self.halted = True
 
         else:
             print("Invalid instruction %i on line %i" \
                     % (self.program[self.programteller], self.programteller))
+            self.halted = True
         
     def input(self):
         if self.inputs:
