@@ -14,7 +14,7 @@ def make_parser():
 
     parser.add_argument('-v', '--verbose', \
                         action='store_true',\
-                        help="Get a printout of all steps and memory for\
+                        help="Get a printout of all registers and memory for\
                                 each step of lmc.")
 
     parser.add_argument('-e', '--explain', \
